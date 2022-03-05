@@ -26,14 +26,14 @@ namespace DemoApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = _context.Users.Include(x=>x.UserAddres).ToList();
+            var users = _context.Users
+                .Include(zz => zz.PhotoList)
+                .Include(zz => zz.UserAddres)
+                .Include(zz => zz.BankAccounts)
+                .ToList();
 
             Console.WriteLine(users.Count);
-          foreach (var user in users)
-            {
-               if(user.BankAccounts.FirstOrDefault().Id != null)
-                 user.BankAccounts.FirstOrDefault().Id = user.Id;
-            }
+          
             return users;
           //  return await _context.Users.ToListAsync();
         }
@@ -86,15 +86,38 @@ namespace DemoApi.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser()
         {
+            var user = new User();
             user.Id = Guid.NewGuid();
-          
+            user.FirstName = "Vishnu";
+            user.LastName = "Kumar PS";
+            user.LastName2 = "ps1";
 
-            if (user.UserAddres!=null) 
-            {
-                user.UserAddres.UserId=user.Id;
-            }
+            user.UserAddres = new UserAddress() { 
+              Id = Guid.NewGuid(),
+              UserId= user.Id,//fk
+              AddressLine1="Kollam",
+              AddressLine2="Alappuzha",
+              
+            };
+            user.BankAccounts = new List<BankAccount>() {
+             new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Sydicate"},
+              new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Central"},
+             new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="HDFC"},
+            };
+
+            user.PhotoList = new List<Photo>() {
+              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url1"},
+              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url2"},
+              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url3"}
+            };
+
+
+
+
+
+            
 
      
 

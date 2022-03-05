@@ -4,6 +4,7 @@ using DemoApi.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApi.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-    partial class DemoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220305094026_v5")]
+    partial class v5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,8 +147,7 @@ namespace DemoApi.Migrations
                 {
                     b.HasOne("DemoApi.Models.User", "User")
                         .WithOne("UserAddres")
-                        .HasForeignKey("DemoApi.Models.UserAddress", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DemoApi.Models.UserAddress", "UserId");
 
                     b.Navigation("User");
                 });
