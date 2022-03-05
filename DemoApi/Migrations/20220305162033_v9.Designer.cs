@@ -4,6 +4,7 @@ using DemoApi.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApi.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-    partial class DemoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220305162033_v9")]
+    partial class v9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +40,7 @@ namespace DemoApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("DemoApi.Models.BankAccount", b =>
@@ -73,17 +75,18 @@ namespace DemoApi.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("pages")
+                    b.Property<int>("pages")
                         .HasColumnType("int");
 
-                    b.Property<int?>("price")
+                    b.Property<int>("price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("DemoApi.Models.Book_Author", b =>
@@ -104,7 +107,7 @@ namespace DemoApi.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Books_Authors");
+                    b.ToTable("Book_Author");
                 });
 
             modelBuilder.Entity("DemoApi.Models.Photo", b =>

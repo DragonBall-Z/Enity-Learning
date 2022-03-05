@@ -88,30 +88,30 @@ namespace DemoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser()
         {
-            var user = new User();
-            user.Id = Guid.NewGuid();
-            user.FirstName = "Vishnu";
-            user.LastName = "Kumar PS";
-            user.LastName2 = "ps1";
+            //var user = new User();
+            //user.Id = Guid.NewGuid();
+            //user.FirstName = "Vishnu";
+            //user.LastName = "Kumar PS";
+            //user.LastName2 = "ps1";
 
-            user.UserAddres = new UserAddress() { 
-              Id = Guid.NewGuid(),
-              UserId= user.Id,//fk
-              AddressLine1="Kollam",
-              AddressLine2="Alappuzha",
+            //user.UserAddres = new UserAddress() { 
+            //  Id = Guid.NewGuid(),
+            //  UserId= user.Id,//fk
+            //  AddressLine1="Kollam",
+            //  AddressLine2="Alappuzha",
               
-            };
-            user.BankAccounts = new List<BankAccount>() {
-             new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Sydicate"},
-              new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Central"},
-             new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="HDFC"},
-            };
+            //};
+            //user.BankAccounts = new List<BankAccount>() {
+            // new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Sydicate"},
+            //  new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Central"},
+            // new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="HDFC"},
+            //};
 
-            user.PhotoList = new List<Photo>() {
-              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url1"},
-              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url2"},
-              new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url3"}
-            };
+            //user.PhotoList = new List<Photo>() {
+            //  new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url1"},
+            //  new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url2"},
+            //  new Photo() { Id=Guid.NewGuid(),UserId=user.Id,PhotUrl="Url3"}
+            //};
 
 
 
@@ -123,10 +123,37 @@ namespace DemoApi.Controllers
 
 
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            //_context.Users.Add(user);
+            //await _context.SaveChangesAsync();
+            /////////////////////////////////////////////
 
-            return user;
+            var book=new Book();
+            book.Title = "BookName 101";
+           
+            _context.Books.Add(book);
+            _context.SaveChanges();
+
+            var author= new Author();
+            author.Id = new Guid();
+            author.PoeticName = "VK";
+            author.AuthorName = "Vishnu Kumar PS";
+
+            _context.Authors.Add(author);
+            _context.SaveChanges();
+
+            var book_author = new Book_Author();
+            book_author.BookId=book.Id;
+            book_author.AuthorId=author.Id;
+
+            _context.Books_Authors.Add(book_author);
+            _context.SaveChanges();
+
+            var result= _context.Books_Authors
+                .Include(x => x.Book)
+                .Where(entry => entry.AuthorId.ToString() == "80d4ed91-8dc7-49a2-7772-08d9fec93a50").Select(entry => entry.Book);
+
+
+            return Ok(result);
         }
 
         [HttpPost]
