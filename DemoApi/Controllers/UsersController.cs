@@ -99,7 +99,7 @@ namespace DemoApi.Controllers
             //  UserId= user.Id,//fk
             //  AddressLine1="Kollam",
             //  AddressLine2="Alappuzha",
-              
+
             //};
             //user.BankAccounts = new List<BankAccount>() {
             // new BankAccount() { Id=Guid.NewGuid(),UserId=user.Id,BankName="Sydicate"},
@@ -117,9 +117,9 @@ namespace DemoApi.Controllers
 
 
 
-            
 
-     
+
+
 
 
 
@@ -127,33 +127,46 @@ namespace DemoApi.Controllers
             //await _context.SaveChangesAsync();
             /////////////////////////////////////////////
 
-            var book=new Book();
-            book.Title = "BookName 101";
-           
-            _context.Books.Add(book);
-            _context.SaveChanges();
+            try
+            {
+                var book = new Book();
+                book.Title = "BookName 101";
 
-            var author= new Author();
-            author.Id = new Guid();
-            author.PoeticName = "VK";
-            author.AuthorName = "Vishnu Kumar PS";
+                _context.Books.Add(book);
+                _context.SaveChanges();
 
-            _context.Authors.Add(author);
-            _context.SaveChanges();
+                var author = new Author();
+                author.Id = new Guid();
+                author.PoeticName = "VK";
+                author.AuthorName = "Vishnu Kumar PS";
 
-            var book_author = new Book_Author();
-            book_author.BookId=book.Id;
-            book_author.AuthorId=author.Id;
+                _context.Authors.Add(author);
+                _context.SaveChanges();
 
-            _context.Books_Authors.Add(book_author);
-            _context.SaveChanges();
+                var book_author = new Book_Author();
+                book_author.BookId = book.Id;
+                book_author.AuthorId = author.Id;
 
-            var result= _context.Books_Authors
-                .Include(x => x.Book)
-                .Where(entry => entry.AuthorId.ToString() == "80d4ed91-8dc7-49a2-7772-08d9fec93a50").Select(entry => entry.Book);
+                _context.Books_Authors.Add(book_author);
+                _context.SaveChanges();
+
+                var result = _context.Books_Authors
+                    .Include(x => x.Book)
+                    .Where(entry => entry.AuthorId.ToString() == "80d4ed91-8dc7-49a2-7772-08d9fec93a50").Select(entry => entry.Book);
 
 
-            return Ok(result);
+              //Gold
+                var result2 = _context.Books.Include(x => x.Book_Authors)
+                                          .ThenInclude(x => x.Author)
+                                          .Single(x => x.Id.ToString() == "B7068538-D425-4A18-8A6D-A5990982DF47");
+
+                return Ok(result2);
+            }
+            catch ( Exception ex)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]
