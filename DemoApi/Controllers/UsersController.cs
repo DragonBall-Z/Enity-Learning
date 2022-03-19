@@ -22,11 +22,23 @@ namespace DemoApi.Controllers
             _context = context;
         }
 
-        public void RandomQuery(string name)
+        [HttpPost("Random")]
+        public List<Book> RandomQuery(string name)
         {
             var students = _context.Books
-                  .FromSqlRaw($"Select * from Books name={name}")
+                  .FromSqlRaw($"Select * from Books")
                   .ToList();
+
+            string sql = "EXEC sp_getBookByName";
+           // var list = _context.Books.FromSqlRaw<Book>(sql).ToList();
+
+            var books = _context.Books
+                      .FromSqlRaw($"sp_getBookByName {name}")
+                      .ToList();
+
+
+            return books;
+
         }
 
         // GET: api/Users
