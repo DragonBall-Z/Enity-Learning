@@ -9,9 +9,9 @@
 
 
         public virtual UserAddress? UserAddres { get; set; }
-        public virtual ICollection<BankAccount>? BankAccounts { get; set;}=new List<BankAccount>() { };
+        public virtual ICollection<BankAccount> BankAccounts { get; set;}=new List<BankAccount>() { };
 
-        public  ICollection<Photo>? PhotoList { get; set; }= new List<Photo>() { };
+        public  ICollection<Photo> PhotoList { get; set; }= new List<Photo>() { };
 
 
     }

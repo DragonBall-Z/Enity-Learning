@@ -2,7 +2,7 @@
 {
     public class Book
     {
-        public Guid Id { get; set; }=Guid.NewGuid();
+        public Guid Id { get; set; }
         public string? Title { get; set; }
         public int? pages { get; set; }
         public int? price  { get; set; }

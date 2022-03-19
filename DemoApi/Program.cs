@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
-
+builder.Services.AddCors();//cors
 
 
 builder.Services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(
@@ -20,6 +20,10 @@ builder.Services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(
     ));
 
 var app = builder.Build();
+app.UseCors(options =>
+          options.WithOrigins("http://localhost:4200")
+          .AllowAnyMethod()
+          .AllowAnyHeader());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

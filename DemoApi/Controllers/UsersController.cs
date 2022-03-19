@@ -22,20 +22,32 @@ namespace DemoApi.Controllers
             _context = context;
         }
 
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public void RandomQuery(string name)
         {
-            var users = _context.Users
-                .Include(zz => zz.PhotoList)
-                .Include(zz => zz.UserAddres)
-                .Include(zz => zz.BankAccounts)
-                .ToList();
+            var students = _context.Books
+                  .FromSqlRaw($"Select * from Books name={name}")
+                  .ToList();
+        }
 
-            Console.WriteLine(users.Count);
+        // GET: api/Users
+        [HttpGet("GetBOOKS")]
+        public async Task<List<Book>> GetBOOKS()
+        {
+
+            var result2 = _context.Books.Include(x => x.Book_Authors)
+                                      .ThenInclude(x => x.Author)
+                                      .ToList();
+
+            //var users = _context.Users
+            //    .Include(zz => zz.PhotoList)
+            //    .Include(zz => zz.UserAddres)
+            //    .Include(zz => zz.BankAccounts)
+            //    .ToList();
+
+           // Console.WriteLine(users.Count);
           
-            return users;
-          //  return await _context.Users.ToListAsync();
+            return result2;
+            //  return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
@@ -86,7 +98,7 @@ namespace DemoApi.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser()
+        public async Task<ActionResult<User>> PostUser(User user)
         {
             //var user = new User();
             //user.Id = Guid.NewGuid();
@@ -148,14 +160,9 @@ namespace DemoApi.Controllers
                 book_author.AuthorId = author.Id;
 
                 _context.Books_Authors.Add(book_author);
-                _context.SaveChanges();
-
-                var result = _context.Books_Authors
-                    .Include(x => x.Book)
-                    .Where(entry => entry.AuthorId.ToString() == "80d4ed91-8dc7-49a2-7772-08d9fec93a50").Select(entry => entry.Book);
 
 
-              //Gold
+
                 var result2 = _context.Books.Include(x => x.Book_Authors)
                                           .ThenInclude(x => x.Author)
                                           .Single(x => x.Id.ToString() == "B7068538-D425-4A18-8A6D-A5990982DF47");

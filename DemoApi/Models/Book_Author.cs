@@ -3,7 +3,7 @@
     public class Book_Author
     {
        
-        public Guid Id { get; set; }
+        public Guid Id { get; set; }//pk
 
         public Guid BookId { get; set; }
 
